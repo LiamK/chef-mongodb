@@ -162,11 +162,6 @@ define :mongodb_instance, :mongodb_type => "mongod" , :action => [:enable, :star
   
   # replicaset
   if !replicaset_name.nil? && node['mongodb']['auto_configure']['replicaset']
-    p "********************* configuring replicaset"
-  else
-    p "********************* NOT NOT NOT configuring replicaset"
-  end
-  if !replicaset_name.nil? && node['mongodb']['auto_configure']['replicaset']
     rs_nodes = search(
       :node,
       "mongodb_cluster_name:#{replicaset['mongodb']['cluster_name']} AND \
@@ -174,14 +169,6 @@ define :mongodb_instance, :mongodb_type => "mongod" , :action => [:enable, :star
        mongodb_shard_name:#{replicaset['mongodb']['shard_name']} AND \
        chef_environment:#{replicaset.chef_environment}"
     )
-
-    p "S E A R C H >>>>>>>>>>>>>>>>>>>>>>"
-    p  "mongodb_cluster_name:#{replicaset['mongodb']['cluster_name']} AND \
-       recipes:mongodb\\:\\:replicaset AND \
-       mongodb_shard_name:#{replicaset['mongodb']['shard_name']} AND \
-       chef_environment:#{replicaset.chef_environment}"
-    p rs_nodes
-    p "S E A R C H <<<<<<<<<<<<<<<<<<<<<<"
   
     ruby_block "config_replicaset" do
       block do
